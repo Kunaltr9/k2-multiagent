@@ -1,0 +1,286 @@
+@import "tailwindcss";
+
+/* ============================================================
+   DESIGN TOKENS — editorial engineering studio
+   ============================================================ */
+
+:root {
+  /* Palette */
+  --color-bg:          #F6F4EF;
+  --color-ink:         #14161A;
+  --color-muted:       #5B6068;
+  --color-hairline:    #DAD6CC;
+  --color-accent:      #1F4D3A;
+  --color-accent-hover:#173A2C;
+  --color-highlight:   #C8553D;
+  --color-surface:     #EFEDE7;   /* slightly darker off-white for cards */
+
+  /* Dark section variant */
+  --color-dark-bg:     #14161A;
+  --color-dark-text:   #F6F4EF;
+  --color-dark-muted:  #9BA0A8;
+  --color-dark-hairline:#2C2F35;
+
+  /* Typography */
+  --font-serif:  var(--font-newsreader), Georgia, "Times New Roman", serif;
+  --font-sans:   var(--font-geist-sans), system-ui, sans-serif;   /* --font-geist-sans from next/font/google Geist */
+  --font-mono:   var(--font-jetbrains-mono), var(--font-geist-mono), "Courier New", monospace;
+
+  /* Type scale — fluid between 375px and 1440px */
+  --text-display: clamp(2.75rem, 5vw + 1rem, 5.5rem);   /* hero H1 */
+  --text-h1:      clamp(2.25rem, 3.5vw + 0.75rem, 4rem);
+  --text-h2:      clamp(1.75rem, 2.5vw + 0.5rem,  2.75rem);
+  --text-h3:      clamp(1.25rem, 1.5vw + 0.25rem, 1.75rem);
+  --text-h4:      1.125rem;
+  --text-body:    1.0625rem;   /* 17px */
+  --text-small:   0.875rem;    /* 14px */
+  --text-label:   0.6875rem;   /* 11px — mono labels */
+
+  /* Leading */
+  --leading-tight:  1.1;
+  --leading-snug:   1.3;
+  --leading-body:   1.65;
+
+  /* Letter-spacing */
+  --tracking-tight: -0.02em;
+  --tracking-label:  0.1em;
+
+  /* Max line length */
+  --measure: 68ch;
+
+  /* Spacing scale — 4px base */
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-5:  1.25rem;
+  --space-6:  1.5rem;
+  --space-8:  2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+
+  /* Section rhythm */
+  --section-gap: clamp(5rem, 10vw, 9rem);
+
+  /* Borders */
+  --border-hairline: 1px solid var(--color-hairline);
+  --border-dark:     1px solid var(--color-dark-hairline);
+
+  /* Transition */
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Grid */
+  --grid-cols: 12;
+  --grid-gutter: clamp(1rem, 3vw, 2rem);
+  --grid-margin: clamp(1rem, 5vw, 5rem);
+  --container-max: 1360px;
+
+  /* Header height — used for scroll-margin-top */
+  --header-h: 4rem;
+}
+
+/* ============================================================
+   TAILWIND v4 THEME EXTENSION
+   ============================================================ */
+
+@theme inline {
+  /* Colors */
+  --color-bg:           var(--color-bg);
+  --color-ink:          var(--color-ink);
+  --color-muted:        var(--color-muted);
+  --color-hairline:     var(--color-hairline);
+  --color-accent:       var(--color-accent);
+  --color-accent-hover: var(--color-accent-hover);
+  --color-highlight:    var(--color-highlight);
+  --color-surface:      var(--color-surface);
+  --color-dark-bg:      var(--color-dark-bg);
+  --color-dark-text:    var(--color-dark-text);
+  --color-dark-muted:   var(--color-dark-muted);
+
+  /* Fonts */
+  --font-serif: var(--font-serif);
+  --font-sans:  var(--font-sans);
+  --font-mono:  var(--font-mono);
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Focus ring — accessible, unobtrusive */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Links default */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Images */
+img,
+video {
+  max-width: 100%;
+  display: block;
+}
+
+/* Selection */
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-dark-text);
+}
+
+/* Scroll margin for anchor links below sticky header */
+[id] {
+  scroll-margin-top: calc(var(--header-h) + 1.5rem);
+}
+
+/* ============================================================
+   TYPOGRAPHY UTILITIES
+   ============================================================ */
+
+.font-serif  { font-family: var(--font-serif); }
+.font-sans   { font-family: var(--font-sans); }
+.font-mono   { font-family: var(--font-mono); }
+
+/* Headline defaults */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+  color: var(--color-ink);
+}
+
+p {
+  max-width: var(--measure);
+}
+
+/* Mono label caps */
+.label-mono {
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+/* ============================================================
+   LAYOUT UTILITIES
+   ============================================================ */
+
+/* Outer wrapper */
+.container-outer {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--grid-margin);
+}
+
+/* 12-col grid */
+.grid-12 {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--grid-gutter);
+}
+
+/* Section rhythm */
+.section {
+  padding-block: var(--section-gap);
+}
+
+/* Thin rule */
+.rule {
+  border: none;
+  border-top: var(--border-hairline);
+  width: 100%;
+}
+
+/* Dark section variant */
+.section-dark {
+  background-color: var(--color-dark-bg);
+  color: var(--color-dark-text);
+}
+
+.section-dark h1,
+.section-dark h2,
+.section-dark h3,
+.section-dark h4,
+.section-dark h5,
+.section-dark h6 {
+  color: var(--color-dark-text);
+}
+
+.section-dark .rule {
+  border-top: var(--border-dark);
+}
+
+/* ============================================================
+   SCROLL REVEAL
+   ============================================================ */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 500ms var(--ease-out),
+    transform 500ms var(--ease-out);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
